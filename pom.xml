@@ -24,12 +24,6 @@
 			<url>https://maven.pkg.github.com/Fousq/ultima</url>
 		</repository>
 	</distributionManagement>
-	<repositories>
-		<repository>
-			<id>jitpack.io</id>
-			<url>https://jitpack.io</url>
-		</repository>
-	</repositories>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
