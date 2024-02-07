@@ -1,0 +1,5 @@
+ALTER TABLE news
+ADD COLUMN show BOOLEAN;
+
+ALTER TABLE news
+ADD COLUMN short_description VARCHAR;

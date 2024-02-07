@@ -1,0 +1,2 @@
+ALTER TABLE course_subject
+DROP CONSTRAINT course_subject_title_key;

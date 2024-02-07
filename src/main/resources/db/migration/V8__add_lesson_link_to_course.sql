@@ -1,0 +1,2 @@
+ALTER TABLE course
+ADD COLUMN lesson_link VARCHAR;

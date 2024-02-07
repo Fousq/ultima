@@ -1,0 +1,5 @@
+ALTER TABLE teacher
+ALTER name DROP NOT NULL;
+
+ALTER TABLE teacher
+ALTER surname DROP NOT NULL;

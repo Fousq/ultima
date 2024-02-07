@@ -1,0 +1,67 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: ${DB_USERNAME:rbapp_user}
+    password: postgres
+  jpa:
+    show-sql: true
+  cloud:
+    openfeign:
+      client:
+        config:
+          bitrix:
+            url: https://deutschkz.bitrix24.kz/rest/1437/eq401cr3x6kqkexl
+            loggerLevel: full
+          wazzup:
+            url: https://api.wazzup24.com
+            loggerLevel: full
+  mail:
+    host: smtp.yandex.ru
+    port: 465
+    username: mail@deutschkz.online
+    password: Dualipa1111
+    properties:
+      mail:
+        transport.protocol: smtp
+        smtp:
+          auth: true
+          ssl.enable: true
+          starttls:
+            enable: true
+            required: true
+logging:
+  level:
+    org:
+      jooq:
+        tools:
+          LoggerListener: debug
+    com:
+      example:
+        rbapp:
+          mail: debug
+
+
+application:
+  secret: 5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437
+
+server:
+  port: 80
+
+org:
+  jobrunr:
+    background-job-server:
+      enabled: true
+
+jobs:
+  subtract-student-time:
+    cron: "0 0 * * *" # every day at 6 am UTC +06:00
+  bitrix-teacher-payment:
+    cron: "0 0 1 * *" # At 6 am UTC +06:00, on day 1 of the month
+
+
+wazzup:
+  auth:
+    token: # place API token
+  whatsapp:
+    channelId: # channelId
+    chatId: # chatId
