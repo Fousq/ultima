@@ -43,7 +43,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.POST, "/api/supervisor").permitAll()
                                 .requestMatchers("/api/chat/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/student/send/application").permitAll()
-                                .requestMatchers("/api/email").permitAll()
+                                .requestMatchers("/api/test/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
