@@ -181,4 +181,9 @@ public class CourseSubjectService {
         return courseSubjectRepository.findTeacherRecentByUserId(userId)
                 .orElse(new RecentCourseSubjectResponse(null, null, null, null));
     }
+
+    public RecentCourseSubjectResponse getRecentCourseSubject() {
+        return courseSubjectRepository.findMostRecent()
+                .orElse(new RecentCourseSubjectResponse(null, null, null, null));
+    }
 }

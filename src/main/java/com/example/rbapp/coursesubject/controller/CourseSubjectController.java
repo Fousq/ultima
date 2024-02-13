@@ -46,4 +46,9 @@ public class CourseSubjectController {
         Long userId = userService.loadUserByToken(token).getId();
         return courseSubjectService.getRecentTeacherCourseSubject(userId);
     }
+
+    @GetMapping("/recent")
+    public RecentCourseSubjectResponse getRecentCourseSubject() {
+        return courseSubjectService.getRecentCourseSubject();
+    }
 }

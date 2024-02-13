@@ -140,4 +140,13 @@ public class CourseSubjectRepository {
                         .fetchOptional(recentCourseSubjectResponseRecordMapper)
         );
     }
+
+    public Optional<RecentCourseSubjectResponse> findMostRecent() {
+        return dslContext.select(COURSE_SUBJECT.ID, COURSE_SUBJECT.TITLE, COURSE_SUBJECT.START_AT, COURSE.LESSON_LINK)
+                .from(COURSE_SUBJECT)
+                .innerJoin(COURSE).on(COURSE.ID.eq(COURSE_SUBJECT.COURSE_ID))
+                .orderBy(COURSE_SUBJECT.START_AT)
+                .limit(1)
+                .fetchOptional(recentCourseSubjectResponseRecordMapper);
+    }
 }
