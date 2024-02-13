@@ -40,4 +40,10 @@ public class CourseSubjectController {
         Long userId = userService.loadUserByToken(token).getId();
         return courseSubjectService.getRecentStudentCourseSubject(userId);
     }
+
+    @GetMapping("/teacher/recent")
+    public RecentCourseSubjectResponse getRecentTeacherCourseSubject(@RequestHeader(AUTHORIZATION) String token) {
+        Long userId = userService.loadUserByToken(token).getId();
+        return courseSubjectService.getRecentTeacherCourseSubject(userId);
+    }
 }

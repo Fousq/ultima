@@ -4,10 +4,8 @@ import com.example.rbapp.api.exception.NotFoundException;
 import com.example.rbapp.coursesubject.controller.api.RecentCourseSubjectResponse;
 import com.example.rbapp.coursesubject.service.recordmapper.RecentCourseSubjectResponseRecordMapper;
 import com.example.rbapp.jooq.codegen.tables.records.CourseSubjectRecord;
-import com.example.rbapp.jooq.codegen.tables.records.StudentCourseSubjectRecord;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
-import org.jooq.InsertSetMoreStep;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -109,7 +107,7 @@ public class CourseSubjectRepository {
         createStudentCourseSubject(List.of(studentId), id);
     }
 
-    public Optional<RecentCourseSubjectResponse> findRecentByUserId(Long userId) {
+    public Optional<RecentCourseSubjectResponse> findStudentRecentByUserId(Long userId) {
         Optional<Long> optionalStudentId = dslContext.select(STUDENT.ID).from(STUDENT)
                 .where(STUDENT.USER_ID.eq(userId))
                 .fetchOptionalInto(Long.class);
@@ -119,6 +117,23 @@ public class CourseSubjectRepository {
                         .innerJoin(STUDENT_COURSE_SUBJECT).on(STUDENT_COURSE_SUBJECT.COURSE_SUBJECT_ID.eq(COURSE_SUBJECT.ID))
                         .innerJoin(COURSE).on(COURSE.ID.eq(COURSE_SUBJECT.COURSE_ID))
                         .where(STUDENT_COURSE_SUBJECT.STUDENT_ID.eq(studentId))
+                        .and(COURSE_SUBJECT.START_AT.lessOrEqual(LocalDateTime.now().plusHours(1)))
+                        .orderBy(COURSE_SUBJECT.START_AT)
+                        .limit(1)
+                        .fetchOptional(recentCourseSubjectResponseRecordMapper)
+        );
+    }
+
+    public Optional<RecentCourseSubjectResponse> findTeacherRecentByUserId(Long userId) {
+        Optional<Long> optionalTeacherId = dslContext.select(TEACHER.ID).from(TEACHER)
+                .where(TEACHER.USER_ID.eq(userId))
+                .fetchOptionalInto(Long.class);
+        return optionalTeacherId.flatMap(teacherId ->
+                dslContext.select(COURSE_SUBJECT.ID, COURSE_SUBJECT.TITLE, COURSE_SUBJECT.START_AT, COURSE.LESSON_LINK)
+                        .from(COURSE_SUBJECT)
+                        .innerJoin(TEACHER_COURSE).on(TEACHER_COURSE.COURSE_ID.eq(COURSE_SUBJECT.COURSE_ID))
+                        .innerJoin(COURSE).on(COURSE.ID.eq(TEACHER_COURSE.COURSE_ID))
+                        .where(TEACHER_COURSE.TEACHER_ID.eq(teacherId))
                         .and(COURSE_SUBJECT.START_AT.lessOrEqual(LocalDateTime.now().plusHours(1)))
                         .orderBy(COURSE_SUBJECT.START_AT)
                         .limit(1)

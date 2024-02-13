@@ -173,7 +173,12 @@ public class CourseSubjectService {
     }
 
     public RecentCourseSubjectResponse getRecentStudentCourseSubject(Long userId) {
-        return courseSubjectRepository.findRecentByUserId(userId)
+        return courseSubjectRepository.findStudentRecentByUserId(userId)
+                .orElse(new RecentCourseSubjectResponse(null, null, null, null));
+    }
+
+    public RecentCourseSubjectResponse getRecentTeacherCourseSubject(Long userId) {
+        return courseSubjectRepository.findTeacherRecentByUserId(userId)
                 .orElse(new RecentCourseSubjectResponse(null, null, null, null));
     }
 }
