@@ -95,4 +95,18 @@ public class CourseRepository {
                 .where(STUDENT.USER_ID.eq(userId))
                 .fetch(studentCourseResponseRecordMapper);
     }
+
+    public List<CourseRecord> findAllByStudentId(Long studentId) {
+        return dslContext.select(COURSE.asterisk()).from(COURSE)
+                .innerJoin(STUDENT_COURSE).on(STUDENT_COURSE.COURSE_ID.eq(COURSE.ID))
+                .where(STUDENT_COURSE.STUDENT_ID.eq(studentId))
+                .fetchInto(CourseRecord.class);
+    }
+
+    public List<CourseRecord> findAllByTeacherId(Long teacherId) {
+        return dslContext.select(COURSE.asterisk()).from(COURSE)
+                .innerJoin(TEACHER_COURSE).on(TEACHER_COURSE.COURSE_ID.eq(COURSE.ID))
+                .where(TEACHER_COURSE.TEACHER_ID.eq(teacherId))
+                .fetchInto(CourseRecord.class);
+    }
 }

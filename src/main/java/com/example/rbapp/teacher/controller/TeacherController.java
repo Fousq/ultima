@@ -23,8 +23,15 @@ public class TeacherController {
     private final TeacherInviteService teacherInviteService;
 
     @GetMapping
-    public List<TeacherResponse> teacherList() {
-        return teacherService.getTeacherList();
+    public List<TeacherResponse> teacherList(
+            @RequestParam(
+                    value = "include-course",
+                    defaultValue = "true",
+                    required = false
+            )
+            Boolean includeCourseParticipation
+    ) {
+        return teacherService.getTeacherList(includeCourseParticipation);
     }
 
     @GetMapping("/{id}")

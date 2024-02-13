@@ -1,5 +1,6 @@
 package com.example.rbapp.course.service;
 
+import com.example.rbapp.course.controller.api.CourseParticipationCompactResponse;
 import com.example.rbapp.course.controller.api.CourseResponse;
 import com.example.rbapp.course.controller.api.CourseSaveRequest;
 import com.example.rbapp.course.entity.Course;
@@ -41,4 +42,8 @@ public interface CourseMapper {
     default List<ZonedDateTime> mapCourseSubjectListToDurationList(List<CourseSubject> courseSubjectList) {
         return courseSubjectList.stream().map(CourseSubject::getStartAt).toList();
     }
+
+    CourseParticipationCompactResponse mapRecordToParticipationCompactResponse(CourseRecord courseRecord);
+
+    List<CourseParticipationCompactResponse> mapRecordToParticipationCompactResponse(Collection<CourseRecord> courseRecords);
 }

@@ -6,6 +6,8 @@ import org.jooq.Record;
 import org.jooq.RecordMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 import static com.example.rbapp.jooq.codegen.Tables.*;
 
 @Component
@@ -24,6 +26,6 @@ public class StudentCourseResponseRecordMapper implements RecordMapper<Record, S
         Long teacherId = record.getValue(TEACHER.ID);
         String teacherName = record.getValue(TEACHER.NAME);
         String teacherSurname = record.getValue(TEACHER.SURNAME);
-        return new TeacherResponse(teacherId, teacherName, teacherSurname, null, null, null);
+        return new TeacherResponse(teacherId, teacherName, teacherSurname, null, null, List.of(), null);
     }
 }

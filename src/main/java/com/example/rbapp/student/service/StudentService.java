@@ -1,6 +1,8 @@
 package com.example.rbapp.student.service;
 
 import com.example.rbapp.api.exception.NotFoundException;
+import com.example.rbapp.course.service.CourseService;
+import com.example.rbapp.jooq.codegen.tables.records.CourseRecord;
 import com.example.rbapp.jooq.codegen.tables.records.StudentRecord;
 import com.example.rbapp.student.controller.api.StudentResponse;
 import com.example.rbapp.student.controller.api.StudentUpdateRequest;
@@ -16,6 +18,18 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
     private final StudentMapper studentMapper;
+    private final CourseService courseService;
+
+    public List<StudentResponse> getAllStudents(Boolean includeCourseParticipation) {
+        List<StudentRecord> studentRecords = studentRepository.findAll();
+        if (includeCourseParticipation) {
+            return studentRecords.stream().map(studentRecord -> {
+                List<CourseRecord> courses = courseService.getStudentCourses(studentRecord.getId());
+                return studentMapper.mapToResponse(studentRecord, courses);
+            }).toList();
+        }
+        return studentMapper.mapToResponse(studentRecords);
+    }
 
 
     public Student getStudent(Long id) {

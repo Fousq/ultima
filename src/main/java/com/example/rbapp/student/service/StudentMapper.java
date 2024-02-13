@@ -1,5 +1,7 @@
 package com.example.rbapp.student.service;
 
+import com.example.rbapp.course.service.CourseMapper;
+import com.example.rbapp.jooq.codegen.tables.records.CourseRecord;
 import com.example.rbapp.jooq.codegen.tables.records.StudentRecord;
 import com.example.rbapp.student.controller.api.StudentResponse;
 import com.example.rbapp.api.service.registration.RegistrationRequest;
@@ -7,14 +9,18 @@ import com.example.rbapp.student.controller.api.StudentUpdateRequest;
 import com.example.rbapp.student.entity.Student;
 import com.example.rbapp.config.AppMapperConfig;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.Collection;
 import java.util.List;
 
-@Mapper(config = AppMapperConfig.class)
+@Mapper(config = AppMapperConfig.class, uses = {CourseMapper.class})
 public interface StudentMapper {
 
     StudentResponse mapToResponse(StudentRecord student);
+
+    @Mapping(target = "inCourses", source = "courses")
+    StudentResponse mapToResponse(StudentRecord student, List<CourseRecord> courses);
 
     List<StudentResponse> mapToResponse(Collection<StudentRecord> student);
 

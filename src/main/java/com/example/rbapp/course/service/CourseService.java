@@ -52,4 +52,12 @@ public class CourseService {
     public List<StudentCourseResponse> getStudentCourseByUserId(Long userId) {
         return courseRepository.findAllByUserId(userId);
     }
+
+    public List<CourseRecord> getStudentCourses(Long studentId) {
+        return courseRepository.findAllByStudentId(studentId);
+    }
+
+    public List<CourseRecord> getTeacherCourses(Long teacherId) {
+        return courseRepository.findAllByTeacherId(teacherId);
+    }
 }

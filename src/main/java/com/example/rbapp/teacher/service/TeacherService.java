@@ -11,7 +11,7 @@ public interface TeacherService {
 
     TeacherResponse update(Long id, TeacherSaveRequest teacherSaveRequest);
 
-    List<TeacherResponse> getTeacherList();
+    List<TeacherResponse> getTeacherList(Boolean includeCourseParticipation);
 
     TeacherResponse getById(Long id);
 

@@ -18,7 +18,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StudentController {
 
-    private final StudentRepository studentRepository;
     private final StudentMapper studentMapper;
     private final StudentService studentService;
     private final StudentRegistrationService studentRegistrationService;
@@ -26,8 +25,15 @@ public class StudentController {
     private final StudentApplicationService studentApplicationService;
 
     @GetMapping
-    public List<StudentResponse> studentList() {
-        return studentMapper.mapToResponse(studentRepository.findAll());
+    public List<StudentResponse> studentList(
+            @RequestParam(
+                    value = "include-course",
+                    defaultValue = "true",
+                    required = false
+            )
+            Boolean includeCourseParticipation
+    ) {
+        return studentService.getAllStudents(includeCourseParticipation);
     }
 
     @GetMapping("/{id}")

@@ -1,6 +1,8 @@
 package com.example.rbapp.teacher.service.impl;
 
 import com.example.rbapp.api.exception.NotFoundException;
+import com.example.rbapp.course.service.CourseService;
+import com.example.rbapp.jooq.codegen.tables.records.CourseRecord;
 import com.example.rbapp.jooq.codegen.tables.records.TeacherRecord;
 import com.example.rbapp.teacher.controller.api.TeacherResponse;
 import com.example.rbapp.teacher.controller.api.TeacherSaveRequest;
@@ -19,6 +21,7 @@ public class TeacherServiceImpl implements TeacherService {
 
     private final TeacherRepository teacherRepository;
     private final TeacherMapper teacherMapper;
+    private final CourseService courseService;
 
     @Override
     public void updateTeacherCourseList(List<Teacher> teachers, Long courseId) {
@@ -64,8 +67,15 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public List<TeacherResponse> getTeacherList() {
-        return teacherMapper.mapEntityToResponse(teacherRepository.findAll());
+    public List<TeacherResponse> getTeacherList(Boolean includeCourseParticipation) {
+        List<TeacherRecord> teacherRecords = teacherRepository.findAll();
+        if (includeCourseParticipation) {
+            return teacherRecords.stream().map(teacherRecord -> {
+                List<CourseRecord> courses = courseService.getTeacherCourses(teacherRecord.getId());
+                return teacherMapper.mapRecordToResponse(teacherRecord, courses);
+            }).toList();
+        }
+        return teacherMapper.mapEntityToResponse(teacherRecords);
     }
 
     public TeacherResponse getById(Long id) {
