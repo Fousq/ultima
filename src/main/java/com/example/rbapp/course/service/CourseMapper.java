@@ -43,7 +43,4 @@ public interface CourseMapper {
         return courseSubjectList.stream().map(CourseSubject::getStartAt).toList();
     }
 
-    CourseParticipationCompactResponse mapRecordToParticipationCompactResponse(CourseRecord courseRecord);
-
-    List<CourseParticipationCompactResponse> mapRecordToParticipationCompactResponse(Collection<CourseRecord> courseRecords);
 }

@@ -1,6 +1,6 @@
 package com.example.rbapp.teacher.service;
 
-import com.example.rbapp.course.service.CourseMapper;
+import com.example.rbapp.course.service.CourseResponseMapper;
 import com.example.rbapp.jooq.codegen.tables.records.CourseRecord;
 import com.example.rbapp.jooq.codegen.tables.records.TeacherRecord;
 import com.example.rbapp.teacher.controller.api.TeacherResponse;
@@ -14,7 +14,7 @@ import org.mapstruct.Mapping;
 import java.util.Collection;
 import java.util.List;
 
-@Mapper(config = AppMapperConfig.class, uses = CourseMapper.class)
+@Mapper(config = AppMapperConfig.class, uses = CourseResponseMapper.class)
 public interface TeacherMapper {
     TeacherResponse mapRecordToResponse(TeacherRecord teacher);
 
