@@ -1,9 +1,11 @@
 package com.example.rbapp.book.contoller;
 
+import com.example.rbapp.book.contoller.api.SendPurchaseApplicationRequest;
 import com.example.rbapp.book.entity.Book;
 import com.example.rbapp.api.exception.NotFoundException;
 import com.example.rbapp.book.service.BookMapper;
 import com.example.rbapp.book.service.BookRepository;
+import com.example.rbapp.book.service.BookService;
 import com.example.rbapp.jooq.codegen.tables.records.BookRecord;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ public class BookController {
 
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
+    private final BookService bookService;
 
     @GetMapping
     public List<Book> bookList() {
@@ -47,6 +50,12 @@ public class BookController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@PathVariable("id") Long id) {
         bookRepository.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/purchase/application")
+    public ResponseEntity<?> sendPurchaseApplication(@RequestBody SendPurchaseApplicationRequest request) {
+        bookService.processSendPurchaseApplication(request);
         return ResponseEntity.ok().build();
     }
 }

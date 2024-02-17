@@ -28,4 +28,7 @@ public interface BitrixClient {
 
     @PostMapping("/crm.contact.list")
     ClientListResponse getClientList(@RequestBody ClientListRequest clientListRequest);
+
+    @PostMapping("")
+    void createBookPurchaseApplication(@RequestBody CreateBookPurchaseApplicationRequest bookPurchaseApplicationRequest);
 }

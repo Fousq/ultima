@@ -2,6 +2,7 @@ package com.example.rbapp.bitrix.service;
 
 import com.example.rbapp.bitrix.api.*;
 import com.example.rbapp.bitrix.client.BitrixClient;
+import com.example.rbapp.bitrix.service.model.BookPurchaseApplication;
 import com.example.rbapp.head.teacher.entity.HeadTeacher;
 import com.example.rbapp.paymentrate.job.model.TeacherPaymentReport;
 import com.example.rbapp.student.entity.Student;
@@ -103,5 +104,10 @@ public class BitrixService {
                         "Руководитель",
                         supervisor.getPhone()))
                 .id();
+    }
+
+    public void createBookPurchaseApplication(BookPurchaseApplication bookPurchaseApplication) {
+        // TODO uncomment after Bitrix implementation
+//        bitrixClient.createBookPurchaseApplication(new CreateBookPurchaseApplicationRequest());
     }
 }
