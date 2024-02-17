@@ -39,7 +39,8 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/roles")
+    // should be GET, but front-end wants to use payload
+    @PostMapping("/roles")
     public List<UserRoleResponse> getUserRoles(@RequestBody UserRolesRequest request) {
         return userService.getUserRoles(request);
     }
