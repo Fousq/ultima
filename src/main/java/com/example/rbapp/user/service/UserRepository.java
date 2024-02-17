@@ -1,6 +1,7 @@
 package com.example.rbapp.user.service;
 
 import com.example.rbapp.jooq.codegen.tables.records.AppUserRecord;
+import com.example.rbapp.user.controller.api.UserRoleResponse;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,4 +20,6 @@ public interface UserRepository {
     void deleteById(Long id);
 
     List<Long> findAllIdByRoles(List<String> roles);
+
+    List<UserRoleResponse> findUserRolesByUserIdList(List<Long> userIdList);
 }

@@ -1,7 +1,9 @@
 package com.example.rbapp.user.service.impl;
 
 import com.example.rbapp.jooq.codegen.tables.records.AppUserRecord;
+import com.example.rbapp.user.controller.api.UserRoleResponse;
 import com.example.rbapp.user.service.UserRepository;
+import com.example.rbapp.user.service.recordmapper.UserRoleRecordMapper;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
@@ -18,6 +20,7 @@ import static org.jooq.impl.DSL.*;
 public class JooqUserRepository implements UserRepository {
 
     private final DSLContext dslContext;
+    private final UserRoleRecordMapper userRoleRecordMapper;
 
     @Override
     public Optional<AppUserRecord> findByUsername(String username) {
@@ -85,5 +88,13 @@ public class JooqUserRepository implements UserRepository {
         return dslContext.select(APP_USER.ID).from(APP_USER)
                 .where(APP_USER.GRANT_TYPE.in(roles))
                 .fetchInto(Long.class);
+    }
+
+    @Override
+    public List<UserRoleResponse> findUserRolesByUserIdList(List<Long> userIdList) {
+        return dslContext.select(APP_USER.ID, APP_USER.GRANT_TYPE)
+                .from(APP_USER)
+                .where(APP_USER.ID.in(userIdList))
+                .fetch(userRoleRecordMapper);
     }
 }

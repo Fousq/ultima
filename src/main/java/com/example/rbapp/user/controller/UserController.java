@@ -1,14 +1,14 @@
 package com.example.rbapp.user.controller;
 
-import com.example.rbapp.user.controller.api.ChangePasswordRequest;
-import com.example.rbapp.user.controller.api.LoginRequest;
-import com.example.rbapp.user.controller.api.LoginResponse;
+import com.example.rbapp.user.controller.api.*;
 import com.example.rbapp.user.service.LoginService;
 import com.example.rbapp.user.service.UserDeleteProcessor;
 import com.example.rbapp.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -37,5 +37,10 @@ public class UserController {
     public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
         userDeleteProcessor.delete(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/roles")
+    public List<UserRoleResponse> getUserRoles(@RequestBody UserRolesRequest request) {
+        return userService.getUserRoles(request);
     }
 }

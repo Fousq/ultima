@@ -4,6 +4,8 @@ import com.example.rbapp.api.exception.NotFoundException;
 import com.example.rbapp.api.service.jwt.JwtService;
 import com.example.rbapp.jooq.codegen.tables.records.AppUserRecord;
 import com.example.rbapp.user.controller.api.ChangePasswordRequest;
+import com.example.rbapp.user.controller.api.UserRoleResponse;
+import com.example.rbapp.user.controller.api.UserRolesRequest;
 import com.example.rbapp.user.entity.User;
 import com.example.rbapp.user.exception.UserPasswordNotMatchedException;
 import com.example.rbapp.user.service.UserMapper;
@@ -72,5 +74,10 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     public List<Long> getUserIdListForRoles(List<String> roles) {
         return userRepository.findAllIdByRoles(roles);
+    }
+
+    @Override
+    public List<UserRoleResponse> getUserRoles(UserRolesRequest request) {
+        return userRepository.findUserRolesByUserIdList(request.userIdList());
     }
 }

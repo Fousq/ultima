@@ -1,6 +1,8 @@
 package com.example.rbapp.user.service;
 
 import com.example.rbapp.user.controller.api.ChangePasswordRequest;
+import com.example.rbapp.user.controller.api.UserRoleResponse;
+import com.example.rbapp.user.controller.api.UserRolesRequest;
 import com.example.rbapp.user.entity.User;
 
 import java.util.List;
@@ -17,4 +19,6 @@ public interface UserService {
     void delete(Long id);
 
     List<Long> getUserIdListForRoles(List<String> role);
+
+    List<UserRoleResponse> getUserRoles(UserRolesRequest request);
 }
