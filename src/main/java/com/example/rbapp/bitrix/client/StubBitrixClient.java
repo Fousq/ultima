@@ -42,4 +42,9 @@ public class StubBitrixClient implements BitrixClient {
     public ClientListResponse getClientList(ClientListRequest clientListRequest) {
         return new ClientListResponse(0L);
     }
+
+    @Override
+    public void createBookPurchaseApplication(CreateBookPurchaseApplicationRequest bookPurchaseApplicationRequest) {
+        log.info("Create book purchase application");
+    }
 }
