@@ -5,6 +5,7 @@ import com.example.rbapp.jooq.codegen.tables.records.NotificationRecord;
 import com.example.rbapp.jooq.codegen.tables.records.UserNotificationRecord;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
+import org.jooq.InsertReturningStep;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -35,10 +36,13 @@ public class NotificationRepository {
     }
 
     public void createUserNotifications(List<UserNotificationRecord> userNotifications) {
-        dslContext.insertInto(USER_NOTIFICATION)
-                .values(userNotifications)
-                .onConflictDoNothing()
-                .execute();
+        var insertUserNotifications = userNotifications.stream().map(userNotificationRecord ->
+                dslContext.insertInto(USER_NOTIFICATION)
+                        .set(USER_NOTIFICATION.NOTIFICATION_ID, userNotificationRecord.getNotificationId())
+                        .set(USER_NOTIFICATION.USER_ID, userNotificationRecord.getUserId())
+                        .onConflictDoNothing()
+        ).toList();
+        dslContext.batch(insertUserNotifications).execute();
     }
 
     public void deleteUserNotification(Long id, Long userId) {
