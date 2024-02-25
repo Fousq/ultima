@@ -5,6 +5,7 @@ public record TeacherInviteRequest(String email,
                                    String name,
                                    String surname,
                                    String currency,
+                                   String bankDetails,
                                    Double individualPrice,
                                    Double pairPrice,
                                    Double groupPrice) {

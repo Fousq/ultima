@@ -15,5 +15,7 @@ public class Teacher {
 
     private String phone;
 
+    private String bankDetails;
+
     private Long userId;
 }

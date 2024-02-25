@@ -30,6 +30,7 @@ public class TeacherUserService {
         teacher.setSurname(request.surname());
         teacher.setEmail(request.email());
         teacher.setPhone(request.phone());
+        teacher.setBankDetails(request.bankDetails());
         teacher.setUserId(userId);
         return teacherService.create(teacher);
     }

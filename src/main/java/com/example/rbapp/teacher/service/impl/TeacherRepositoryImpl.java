@@ -28,6 +28,7 @@ public class TeacherRepositoryImpl implements TeacherRepository {
                 .set(TEACHER.PHONE, teacher.getPhone())
                 .set(TEACHER.SURNAME, teacher.getSurname())
                 .set(TEACHER.USER_ID, teacher.getUserId())
+                .set(TEACHER.BANK_DETAILS, teacher.getBankDetails())
                 .returningResult(TEACHER.ID)
                 .fetchSingleInto(Long.class);
     }
