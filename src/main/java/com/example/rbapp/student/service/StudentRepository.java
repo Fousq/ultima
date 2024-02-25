@@ -29,6 +29,7 @@ public class StudentRepository {
                 .set(STUDENT.PHONE, student.getPhone())
                 .set(STUDENT.SURNAME, student.getSurname())
                 .set(STUDENT.USER_ID, student.getUserId())
+                .set(STUDENT.BIRTHDAY, student.getBirthday())
                 .returningResult(STUDENT.ID)
                 .fetchSingleInto(Long.class);
     }

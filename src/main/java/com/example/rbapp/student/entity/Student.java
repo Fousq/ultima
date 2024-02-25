@@ -2,6 +2,7 @@ package com.example.rbapp.student.entity;
 
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -24,6 +25,8 @@ public class Student {
     private String studyGoal;
 
     private String wishes;
+
+    private LocalDate birthday;
 
     private Long userId;
 

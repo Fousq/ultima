@@ -39,6 +39,7 @@ public class StudentUserService {
         student.setMiddleName(request.middleName());
         student.setPhone(request.phone());
         student.setEmail(request.email());
+        student.setBirthday(request.birthday());
         student.setUserId(userId);
         Long id = studentService.create(student);
 
