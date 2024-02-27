@@ -16,7 +16,7 @@ public class StudentApplicationService {
 
 
     public void create(StudentApplicationRequest request) {
-        Student student = studentUserService.createUserStudent(request.email(), request.phone());
+        Student student = studentUserService.createUserStudent(request);
         bitrixService.createClientApplication(student);
     }
 }

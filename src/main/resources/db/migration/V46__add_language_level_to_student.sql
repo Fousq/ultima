@@ -1,0 +1,2 @@
+ALTER TABLE student
+ADD COLUMN lang_level VARCHAR;

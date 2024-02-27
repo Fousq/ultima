@@ -1,5 +1,6 @@
 package com.example.rbapp.studentuser;
 
+import com.example.rbapp.student.controller.api.StudentApplicationRequest;
 import com.example.rbapp.student.controller.api.StudentInviteRequest;
 import com.example.rbapp.student.entity.Student;
 import com.example.rbapp.student.service.StudentService;
@@ -16,13 +17,13 @@ public class StudentUserService {
     private final StudentService studentService;
     private final UserService userService;
 
-    @Transactional
-    public Student createUserStudent(String email, String phone) {
-        Long userId = createUser(email, phone);
+    public Student createUserStudent(StudentApplicationRequest request) {
+        Long userId = createUser(request.email(), request.phone());
 
         Student student = new Student();
-        student.setEmail(email);
-        student.setPhone(phone);
+        student.setEmail(request.email());
+        student.setPhone(request.phone());
+        student.setLangLevel(request.level());
         student.setUserId(userId);
         Long id = studentService.create(student);
 

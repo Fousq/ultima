@@ -30,6 +30,7 @@ public class StudentRepository {
                 .set(STUDENT.SURNAME, student.getSurname())
                 .set(STUDENT.USER_ID, student.getUserId())
                 .set(STUDENT.BIRTHDAY, student.getBirthday())
+                .set(STUDENT.LANG_LEVEL, student.getLangLevel())
                 .returningResult(STUDENT.ID)
                 .fetchSingleInto(Long.class);
     }

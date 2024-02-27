@@ -30,6 +30,8 @@ public class Student {
 
     private String parentPhone;
 
+    private String langLevel;
+
     private Long userId;
 
     private List<Long> courseIds;
