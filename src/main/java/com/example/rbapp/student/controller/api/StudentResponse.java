@@ -16,6 +16,7 @@ public record StudentResponse(Long id,
                               String studyGoal,
                               String wishes,
                               LocalDate birthday,
+                              String parentPhone,
                               List<CourseParticipationCompactResponse> inCourses,
                               Long userId) {
 }

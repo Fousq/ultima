@@ -9,6 +9,7 @@ public record StudentUpdateRequest(String name,
                                    String middleName,
                                    String city,
                                    LocalDate birthday,
+                                   String parentPhone,
                                    String studyGoal,
                                    String wishes) {
 }

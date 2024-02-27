@@ -28,6 +28,8 @@ public class Student {
 
     private LocalDate birthday;
 
+    private String parentPhone;
+
     private Long userId;
 
     private List<Long> courseIds;

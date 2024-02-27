@@ -85,6 +85,7 @@ public class StudentRepository {
                 .set(STUDENT.CITY, studentRecord.getCity())
                 .set(STUDENT.EMAIL, studentRecord.getEmail())
                 .set(STUDENT.BIRTHDAY, studentRecord.getBirthday())
+                .set(STUDENT.PARENT_PHONE, studentRecord.getParentPhone())
                 .where(STUDENT.ID.eq(studentRecord.getId()))
                 .execute();
     }
