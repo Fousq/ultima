@@ -54,9 +54,9 @@ org:
 
 jobs:
   subtract-student-time:
-    cron: "0 0 * * *" # every day at 6 am UTC +06:00
+    cron: "0 1 * * *" # every day at 6 am UTC +05:00
   bitrix-teacher-payment:
-    cron: "0 0 1 * *" # At 6 am UTC +06:00, on day 1 of the month
+    cron: "0 1 1 * *" # At 6 am UTC +06:00, on day 1 of the month
 
 
 wazzup:
