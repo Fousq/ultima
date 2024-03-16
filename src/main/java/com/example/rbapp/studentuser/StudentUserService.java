@@ -17,19 +17,6 @@ public class StudentUserService {
     private final StudentService studentService;
     private final UserService userService;
 
-    public Student createUserStudent(StudentApplicationRequest request) {
-        Long userId = createUser(request.email(), request.phone());
-
-        Student student = new Student();
-        student.setEmail(request.email());
-        student.setPhone(request.phone());
-        student.setLangLevel(request.level());
-        student.setUserId(userId);
-        Long id = studentService.create(student);
-
-        return studentService.getStudent(id);
-    }
-
     @Transactional
     public Student createUserStudent(StudentInviteRequest request) {
         Long userId = createUser(request.email(), request.phone());
