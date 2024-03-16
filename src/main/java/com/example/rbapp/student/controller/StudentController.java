@@ -7,11 +7,14 @@ import com.example.rbapp.api.service.registration.RegistrationRequest;
 import com.example.rbapp.student.controller.api.StudentUpdateRequest;
 import com.example.rbapp.student.service.*;
 import com.example.rbapp.student.service.registration.StudentRegistrationService;
+import com.example.rbapp.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @RestController
 @RequestMapping("/api/student")
@@ -23,6 +26,7 @@ public class StudentController {
     private final StudentRegistrationService studentRegistrationService;
     private final StudentInviteService studentInviteService;
     private final StudentApplicationService studentApplicationService;
+    private final UserService userService;
 
     @GetMapping
     public List<StudentResponse> studentList(
@@ -59,14 +63,16 @@ public class StudentController {
     }
 
     @PostMapping("/send/application")
-    public ResponseEntity<Object> postCourseApplication(@RequestBody StudentApplicationRequest request) {
-        studentApplicationService.create(request);
+    public ResponseEntity<Object> postCourseApplication(@RequestHeader(AUTHORIZATION) String token,
+                                                        @RequestBody StudentApplicationRequest request) {
+        Long userId = userService.loadUserByToken(token).getId();
+        studentApplicationService.create(userId, request);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/user/{id}")
     public StudentResponse getStudentByUserId(@PathVariable("id") Long userId) {
-        return studentService.getStudentByUserId(userId);
+        return studentService.getStudentResponseByUserId(userId);
     }
 
     @DeleteMapping("/{id}")

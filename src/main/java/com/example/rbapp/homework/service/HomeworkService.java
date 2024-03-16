@@ -154,7 +154,7 @@ public class HomeworkService {
         Long homeworkId = homeworkRepository.findByCourseSubjectId(courseSubjectId)
                 .map(HomeworkRecord::getId)
                 .orElseThrow(() -> new NotFoundException("Homework not found by courseSubjectId"));
-        StudentResponse student = studentService.getStudentByUserId(userId);
+        StudentResponse student = studentService.getStudentResponseByUserId(userId);
         return updateStudentHomework(homeworkId, student.id(), request);
     }
 }

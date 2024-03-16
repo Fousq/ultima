@@ -67,9 +67,15 @@ public class StudentService {
         studentRepository.updateBitrixIdById(bitrixId, student.getId());
     }
 
-    public StudentResponse getStudentByUserId(Long userId) {
+    public StudentResponse getStudentResponseByUserId(Long userId) {
         return studentRepository.findByUserId(userId)
                 .map(studentMapper::mapToResponse)
+                .orElseThrow(() -> new NotFoundException("Student not found by user id"));
+    }
+
+    public Student getStudentByUserId(Long userId) {
+        return studentRepository.findByUserId(userId)
+                .map(studentMapper::mapToEntity)
                 .orElseThrow(() -> new NotFoundException("Student not found by user id"));
     }
 
@@ -83,5 +89,10 @@ public class StudentService {
 
     public void deleteByUserId(Long userId) {
         studentRepository.deleteByUserId(userId);
+    }
+
+    public void updateEntity(Student student) {
+        StudentRecord studentRecord = studentMapper.mapEntityToRecord(student);
+        studentRepository.update(studentRecord);
     }
 }
