@@ -35,4 +35,6 @@ public class Student {
     private Long userId;
 
     private List<Long> courseIds;
+
+    private Long bitrixContactId;
 }

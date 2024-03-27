@@ -9,6 +9,7 @@ import com.example.rbapp.student.entity.Student;
 import com.example.rbapp.supervisor.entity.Supervisor;
 import com.example.rbapp.teacher.entity.Teacher;
 import com.example.rbapp.timepackage.entity.TimePackage;
+import com.example.rbapp.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -68,11 +69,9 @@ public class BitrixService {
     }
 
     public void createClientApplication(Student student) {
-        String title = student.getName() + student.getPhone();
-        var phone = List.of(new BitrixValue(student.getPhone(), "WORK"));
-        var fields = new BitrixCreateClientApplicationFields(title, student.getName(), phone);
-        var request = new CreateClientApplicationRequest(fields);
-        bitrixClient.createClientApplication(request);
+        var fields = new BitrixCreateDealFields(FROM_SITE, DEAL_CATEGORY_ID, student.getBitrixContactId());
+        var request = new CreateDealRequest(fields);
+        bitrixClient.createDeal(request);
     }
 
     public void createPayment(TeacherPaymentReport teacherPaymentReport) {
