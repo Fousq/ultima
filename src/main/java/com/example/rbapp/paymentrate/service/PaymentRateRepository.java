@@ -1,7 +1,6 @@
 package com.example.rbapp.paymentrate.service;
 
 import com.example.rbapp.jooq.codegen.tables.records.PaymentRateRecord;
-import com.example.rbapp.paymentrate.job.model.TeacherPaymentReport;
 import com.example.rbapp.paymentrate.service.recordmapper.TeacherPaymentReportRecordMapper;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
@@ -33,9 +32,10 @@ public class PaymentRateRepository {
         dslContext.batch(insert).execute();
     }
 
-    public List<PaymentRateRecord> findAllByTeacherId(Long teacherId) {
+    public List<PaymentRateRecord> findAllActualByTeacherId(Long teacherId) {
         return dslContext.selectFrom(PAYMENT_RATE)
                 .where(PAYMENT_RATE.TEACHER_ID.eq(teacherId))
+                .and(PAYMENT_RATE.UPDATE_DATE.isNull())
                 .fetchInto(PaymentRateRecord.class);
     }
 
@@ -50,23 +50,45 @@ public class PaymentRateRepository {
                 .fetchSingleInto(BigDecimal.class);
     }
 
-    public List<PaymentRateRecord> findAllByUserId(Long userId) {
+    public List<PaymentRateRecord> findAllActualByUserId(Long userId) {
         return dslContext.select(PAYMENT_RATE.fields()).from(PAYMENT_RATE)
                 .innerJoin(TEACHER).on(TEACHER.ID.eq(PAYMENT_RATE.TEACHER_ID))
                 .where(TEACHER.USER_ID.eq(userId))
+                .and(PAYMENT_RATE.UPDATE_DATE.isNull())
                 .fetchInto(PaymentRateRecord.class);
     }
 
-    public List<TeacherPaymentReport> findTeacherPaymentReportBetween(LocalDate startDate, LocalDate endDate) {
-        return dslContext.select(TEACHER.ID, TEACHER.NAME, TEACHER.SURNAME, sum(PAYMENT_RATE.AMOUNT).as("total"), CURRENCY.CODE)
+    public List<PaymentRateRecord> findTeacherPaymentRateBetween(LocalDate startDate, LocalDate endDate, Long teacherId) {
+        return dslContext.select(PAYMENT_RATE.asterisk())
                 .from(PAYMENT_RATE)
-                .innerJoin(CURRENCY).on(CURRENCY.ID.eq(PAYMENT_RATE.CURRENCY_ID))
+                .innerJoin(TEACHER).on(TEACHER.ID.eq(PAYMENT_RATE.TEACHER_ID))
+                .where(PAYMENT_RATE.UPDATE_DATE.between(startDate.atStartOfDay(), endDate.atTime(LocalTime.MAX)))
+                .and(PAYMENT_RATE.TEACHER_ID.eq(teacherId))
+                .orderBy(PAYMENT_RATE.UPDATE_DATE)
+                .fetchInto(PaymentRateRecord.class);
+    }
+
+    public BigDecimal countTotalForPaymentRateBetween(Long paymentRateId, LocalDate startDate, LocalDate endDate) {
+        return dslContext.select(sum(PAYMENT_RATE.AMOUNT))
+                .from(PAYMENT_RATE)
                 .innerJoin(TEACHER).on(TEACHER.ID.eq(PAYMENT_RATE.TEACHER_ID))
                 .innerJoin(TEACHER_COURSE).on(TEACHER_COURSE.TEACHER_ID.eq(TEACHER.ID))
-                .innerJoin(COURSE).on(COURSE.ID.eq(TEACHER_COURSE.COURSE_ID))
+                .innerJoin(COURSE).on(COURSE.ID.eq(TEACHER_COURSE.COURSE_ID)).and(COURSE.TYPE.eq(PAYMENT_RATE.TYPE))
                 .innerJoin(COURSE_SUBJECT).on(COURSE_SUBJECT.COURSE_ID.eq(COURSE.ID))
                 .where(COURSE_SUBJECT.START_AT.between(startDate.atStartOfDay(), endDate.atTime(LocalTime.MAX)))
-                .groupBy(TEACHER.ID, CURRENCY.CODE)
-                .fetch(teacherPaymentReportRecordMapper);
+                .and(PAYMENT_RATE.ID.eq(paymentRateId))
+                .fetchSingleInto(BigDecimal.class);
+    }
+
+    public void batchUpdate(List<PaymentRateRecord> paymentRateRecords) {
+        var update = paymentRateRecords.stream().map(paymentRateRecord -> dslContext.update(PAYMENT_RATE)
+                .set(PAYMENT_RATE.AMOUNT, paymentRateRecord.getAmount())
+                .set(PAYMENT_RATE.UPDATE_DATE, paymentRateRecord.getUpdateDate())
+        ).toList();
+        dslContext.batch(update).execute();
+    }
+
+    public List<Long> findTeacherIdsWithExistingPaymentRate() {
+        return dslContext.selectDistinct(PAYMENT_RATE.TEACHER_ID).from(PAYMENT_RATE).fetchInto(Long.class);
     }
 }

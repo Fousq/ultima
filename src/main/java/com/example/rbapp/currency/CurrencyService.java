@@ -16,4 +16,9 @@ public class CurrencyService {
         return currencyRepository.findIdByCode(code)
                 .orElseThrow(() -> new NotFoundException("Currency id not found by code"));
     }
+
+    public String getCodeById(Long id) {
+        return currencyRepository.findCodeById(id)
+                .orElseThrow(() -> new NotFoundException("Currency code not found by id"));
+    }
 }

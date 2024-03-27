@@ -2,6 +2,7 @@ package com.example.rbapp.paymentrate.controller;
 
 import com.example.rbapp.paymentrate.controller.api.PaymentMonthReportResponse;
 import com.example.rbapp.paymentrate.controller.api.PaymentRateResponse;
+import com.example.rbapp.paymentrate.controller.api.UpdateTeacherPaymentRatesRequest;
 import com.example.rbapp.paymentrate.service.PaymentRateService;
 import com.example.rbapp.paymentrate.service.PaymentReportService;
 import com.example.rbapp.user.service.UserService;
@@ -27,9 +28,14 @@ public class PaymentRateController {
         return paymentRateService.getUserPaymentRateList(userId);
     }
 
-    @GetMapping("/teacher/report/month/{monthId}")
+//    @GetMapping("/teacher/report/month/{monthId}")
     public PaymentMonthReportResponse getTeacherMonthReport(@RequestHeader(AUTHORIZATION) String token,
                                                             @PathVariable("monthId") Integer monthId) {
         return paymentReportService.getMonthReport(token, monthId);
+    }
+
+    @PostMapping("/teacher")
+    public List<PaymentRateResponse> updateTeacherPaymentRates(@RequestBody UpdateTeacherPaymentRatesRequest request) {
+        return paymentRateService.updateTeacherPaymentRates(request);
     }
 }

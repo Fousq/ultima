@@ -3,6 +3,7 @@ package com.example.rbapp.paymentrate.service;
 import com.example.rbapp.config.AppMapperConfig;
 import com.example.rbapp.jooq.codegen.tables.records.PaymentRateRecord;
 import com.example.rbapp.paymentrate.controller.api.PaymentRateResponse;
+import com.example.rbapp.paymentrate.controller.api.UpdatePaymentRateRequest;
 import com.example.rbapp.paymentrate.entity.PaymentRate;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
@@ -28,4 +29,18 @@ public interface PaymentRateMapper {
     List<PaymentRateResponse> mapRecordToResponse(List<PaymentRateRecord> paymentRateRecords);
 
     PaymentRateResponse mapRecordToResponse(PaymentRateRecord paymentRateRecord);
+
+    default List<PaymentRateRecord> mapUpdateRequestToRecord(List<UpdatePaymentRateRequest> updatePaymentRateRequests,
+                                                     Long teacherId,
+                                                     Long currencyId) {
+        return updatePaymentRateRequests.stream().map(updatePaymentRateRequest -> {
+                    var paymentRateRecord = new PaymentRateRecord();
+                    paymentRateRecord.setAmount(updatePaymentRateRequest.amount());
+                    paymentRateRecord.setType(updatePaymentRateRequest.type());
+                    paymentRateRecord.setTeacherId(teacherId);
+                    paymentRateRecord.setCurrencyId(currencyId);
+                    return paymentRateRecord;
+        }
+        ).toList();
+    }
 }

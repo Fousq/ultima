@@ -19,4 +19,10 @@ public class CurrencyRepository {
                 .where(CURRENCY.CODE.eq(code))
                 .fetchOptionalInto(Long.class);
     }
+
+    public Optional<String> findCodeById(Long id) {
+        return dslContext.select(CURRENCY.CODE).from(CURRENCY)
+                .where(CURRENCY.ID.eq(id))
+                .fetchOptionalInto(String.class);
+    }
 }
