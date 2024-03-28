@@ -9,6 +9,7 @@ import com.example.rbapp.user.service.UserDeleteProcessor;
 import com.example.rbapp.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +23,7 @@ public class UserDeleteProcessorImpl implements UserDeleteProcessor {
     private final UserService userService;
 
     @Override
+    @Transactional
     public void delete(Long id) {
         studentDeleteProcessor.deleteByUserId(id);
         teacherDeleteProcessor.deleteByUserId(id);
