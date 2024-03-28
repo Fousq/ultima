@@ -186,4 +186,8 @@ public class CourseSubjectService {
         return courseSubjectRepository.findMostRecent()
                 .orElse(new RecentCourseSubjectResponse(null, null, null, null));
     }
+
+    public Integer countSubjectsByCourseTypeForTeacher(Long teacherId, String type) {
+        return courseSubjectRepository.countSubjectsByCourseTypeForTeacher(teacherId, type);
+    }
 }

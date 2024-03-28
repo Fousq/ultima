@@ -33,30 +33,30 @@ public class BitrixPaymentSendJob {
     @Autowired
     private String cronExpression;
 
-    @PostConstruct
-    public void schedule() {
-        jobScheduler.scheduleRecurrently(
-                "bitrix-teacher-payment",
-                cronExpression,
-                this::execute
-        );
-    }
+//    @PostConstruct
+//    public void schedule() {
+//        jobScheduler.scheduleRecurrently(
+//                "bitrix-teacher-payment",
+//                cronExpression,
+//                this::execute
+//        );
+//    }
 
     public void execute() {
         // take yesterday to have a whole month to calculate payment for
-        LocalDate yesterday = LocalDate.now().minusDays(1);
-        paymentRateService.getTeacherIdsWithPaymentReports().forEach(teacherId -> {
-            PaymentReport paymentReport = paymentRateService.getTeacherPaymentReport(teacherId, yesterday);
-            String currencyCode = currencyService.getCodeById(paymentReport.currencyId());
-            TeacherResponse teacher = teacherService.getById(teacherId);
-            TeacherPaymentReport teacherPaymentReport = TeacherPaymentReport.builder()
-                    .id(teacherId)
-                    .name(teacher.name())
-                    .surname(teacher.surname())
-                    .total(paymentReport.total())
-                    .currencyCode(currencyCode)
-                    .build();
-            bitrixService.createPayment(teacherPaymentReport);
-        });
+//        LocalDate yesterday = LocalDate.now().minusDays(1);
+//        paymentRateService.getTeacherIdsWithPaymentReports().forEach(teacherId -> {
+//            PaymentReport paymentReport = paymentRateService.getTeacherPaymentReport(teacherId, yesterday);
+//            String currencyCode = currencyService.getCodeById(paymentReport.currencyId());
+//            TeacherResponse teacher = teacherService.getById(teacherId);
+//            TeacherPaymentReport teacherPaymentReport = TeacherPaymentReport.builder()
+//                    .id(teacherId)
+//                    .name(teacher.name())
+//                    .surname(teacher.surname())
+//                    .total(paymentReport.total())
+//                    .currencyCode(currencyCode)
+//                    .build();
+//            bitrixService.createPayment(teacherPaymentReport);
+//        });
     }
 }

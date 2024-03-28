@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.example.rbapp.jooq.codegen.Tables.*;
+import static org.jooq.impl.DSL.count;
 
 @Repository
 @RequiredArgsConstructor
@@ -148,5 +149,14 @@ public class CourseSubjectRepository {
                 .orderBy(COURSE_SUBJECT.START_AT)
                 .limit(1)
                 .fetchOptional(recentCourseSubjectResponseRecordMapper);
+    }
+
+    public Integer countSubjectsByCourseTypeForTeacher(Long teacherId, String type) {
+        return dslContext.selectCount().from(COURSE_SUBJECT)
+                        .innerJoin(COURSE).on(COURSE.ID.eq(COURSE_SUBJECT.COURSE_ID))
+                        .innerJoin(TEACHER_COURSE).on(TEACHER_COURSE.COURSE_ID.eq(COURSE_SUBJECT.COURSE_ID))
+                        .where(COURSE.TYPE.eq(type))
+                        .and(TEACHER_COURSE.TEACHER_ID.eq(teacherId))
+                .fetchSingleInto(Integer.class);
     }
 }

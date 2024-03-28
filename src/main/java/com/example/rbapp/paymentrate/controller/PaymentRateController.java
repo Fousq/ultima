@@ -28,7 +28,7 @@ public class PaymentRateController {
         return paymentRateService.getUserPaymentRateList(userId);
     }
 
-//    @GetMapping("/teacher/report/month/{monthId}")
+    @GetMapping("/teacher/report/month/{monthId}")
     public PaymentMonthReportResponse getTeacherMonthReport(@RequestHeader(AUTHORIZATION) String token,
                                                             @PathVariable("monthId") Integer monthId) {
         return paymentReportService.getMonthReport(token, monthId);

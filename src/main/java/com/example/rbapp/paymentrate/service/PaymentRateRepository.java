@@ -1,6 +1,8 @@
 package com.example.rbapp.paymentrate.service;
 
 import com.example.rbapp.jooq.codegen.tables.records.PaymentRateRecord;
+import com.example.rbapp.paymentrate.controller.api.PaymentRateResponse;
+import com.example.rbapp.paymentrate.service.recordmapper.PaymentRateResponseRecordMapper;
 import com.example.rbapp.paymentrate.service.recordmapper.TeacherPaymentReportRecordMapper;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
@@ -19,7 +21,7 @@ import static org.jooq.impl.DSL.sum;
 public class PaymentRateRepository {
 
     private final DSLContext dslContext;
-    private final TeacherPaymentReportRecordMapper teacherPaymentReportRecordMapper;
+    private final PaymentRateResponseRecordMapper paymentRateResponseRecordMapper;
 
     public void batchCreate(List<PaymentRateRecord> paymentRateRecords) {
         var insert = paymentRateRecords.stream()
@@ -50,12 +52,13 @@ public class PaymentRateRepository {
                 .fetchSingleInto(BigDecimal.class);
     }
 
-    public List<PaymentRateRecord> findAllActualByUserId(Long userId) {
-        return dslContext.select(PAYMENT_RATE.fields()).from(PAYMENT_RATE)
+    public List<PaymentRateResponse> findAllActualByUserId(Long userId) {
+        return dslContext.select(PAYMENT_RATE.asterisk(), CURRENCY.CODE).from(PAYMENT_RATE)
                 .innerJoin(TEACHER).on(TEACHER.ID.eq(PAYMENT_RATE.TEACHER_ID))
+                .innerJoin(CURRENCY).on(CURRENCY.ID.eq(PAYMENT_RATE.CURRENCY_ID))
                 .where(TEACHER.USER_ID.eq(userId))
                 .and(PAYMENT_RATE.UPDATE_DATE.isNull())
-                .fetchInto(PaymentRateRecord.class);
+                .fetch(paymentRateResponseRecordMapper);
     }
 
     public List<PaymentRateRecord> findTeacherPaymentRateBetween(LocalDate startDate, LocalDate endDate, Long teacherId) {

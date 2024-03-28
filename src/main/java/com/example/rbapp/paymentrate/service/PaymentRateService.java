@@ -43,8 +43,7 @@ public class PaymentRateService {
     }
 
     public List<PaymentRateResponse> getUserPaymentRateList(Long userId) {
-        List<PaymentRateRecord> paymentRateRecords = paymentRateRepository.findAllActualByUserId(userId);
-        return paymentRateMapper.mapRecordToResponse(paymentRateRecords);
+        return paymentRateRepository.findAllActualByUserId(userId);
     }
 
     public List<Long> getTeacherIdsWithPaymentReports() {
@@ -71,20 +70,22 @@ public class PaymentRateService {
         );
     }
 
-    public PaymentReport getTeacherPaymentReport(Long teacherId, LocalDate date) {
-        LocalDate endDate = date;
-        LocalDate startDate = date.withDayOfMonth(1);
+    public List<PaymentReport> getTeacherPaymentReport(Long teacherId, Month month) {
+        YearMonth yearMonth = Year.now().atMonth(month);
+        LocalDate startDate = yearMonth.atDay(1);
+        LocalDate endDate = yearMonth.atEndOfMonth();
 
         var paymentRates = paymentRateRepository.findTeacherPaymentRateBetween(startDate, endDate, teacherId);
         paymentRates.addAll(paymentRateRepository.findAllActualByTeacherId(teacherId));
         var paymentRatesByType = paymentRates.stream()
                 .collect(Collectors.groupingBy(PaymentRateRecord::getType, mapping(Function.identity(), toList())));
-        BigDecimal total = paymentRatesByType.values().stream()
-                .map(paymentRateRecords -> calculateTotal(paymentRateRecords, startDate, endDate))
-                .reduce(new BigDecimal("0.00"), BigDecimal::add);
-
-        PaymentRateRecord actualPaymentRate = paymentRates.get(paymentRates.size() - 1);
-        return new PaymentReport(total, actualPaymentRate.getCurrencyId());
+        return paymentRatesByType.values().stream()
+                .map(paymentRateRecords -> {
+                    BigDecimal total = calculateTotal(paymentRateRecords, startDate, endDate);
+                    PaymentRateRecord paymentRateRecord = paymentRateRecords.get(0);
+                    return new PaymentReport(paymentRateRecord.getType(), total, paymentRateRecord.getCurrencyId());
+                })
+                .toList();
     }
 
     private BigDecimal calculateTotal(List<PaymentRateRecord> paymentRates, LocalDate startDate, LocalDate endDate) {
