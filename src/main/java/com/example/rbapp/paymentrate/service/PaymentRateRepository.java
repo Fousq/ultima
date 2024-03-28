@@ -3,7 +3,6 @@ package com.example.rbapp.paymentrate.service;
 import com.example.rbapp.jooq.codegen.tables.records.PaymentRateRecord;
 import com.example.rbapp.paymentrate.controller.api.PaymentRateResponse;
 import com.example.rbapp.paymentrate.service.recordmapper.PaymentRateResponseRecordMapper;
-import com.example.rbapp.paymentrate.service.recordmapper.TeacherPaymentReportRecordMapper;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
@@ -93,5 +92,13 @@ public class PaymentRateRepository {
 
     public List<Long> findTeacherIdsWithExistingPaymentRate() {
         return dslContext.selectDistinct(PAYMENT_RATE.TEACHER_ID).from(PAYMENT_RATE).fetchInto(Long.class);
+    }
+
+    public void batchUpdateAmount(List<PaymentRateRecord> paymentRateRecords) {
+        var update = paymentRateRecords.stream().map(paymentRateRecord -> dslContext.update(PAYMENT_RATE)
+                .set(PAYMENT_RATE.AMOUNT, paymentRateRecord.getAmount())
+                .where(PAYMENT_RATE.ID.eq(paymentRateRecord.getId()))
+        ).toList();
+        dslContext.batch(update).execute();
     }
 }

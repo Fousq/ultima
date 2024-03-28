@@ -34,8 +34,13 @@ public class PaymentRateController {
         return paymentReportService.getMonthReport(token, monthId);
     }
 
-    @PostMapping("/teacher")
-    public List<PaymentRateResponse> updateTeacherPaymentRates(@RequestBody UpdateTeacherPaymentRatesRequest request) {
-        return paymentRateService.updateTeacherPaymentRates(request);
+//    @PostMapping("/teacher")
+//    public List<PaymentRateResponse> updateTeacherPaymentRates(@RequestBody UpdateTeacherPaymentRatesRequest request) {
+//        return paymentRateService.updateTeacherPaymentRates(request);
+//    }
+
+    @PutMapping("/teacher")
+    public void updateTeacherPaymentRates(@RequestBody UpdateTeacherPaymentRatesRequest request) {
+        paymentRateService.putTeacherPaymentRates(request);
     }
 }
