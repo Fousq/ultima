@@ -16,6 +16,7 @@ import java.util.List;
 
 @Mapper(config = AppMapperConfig.class, uses = CourseResponseMapper.class)
 public interface TeacherMapper {
+    @Mapping(target = "isPayableForCanceledLesson", source = "payableForCanceledLesson")
     TeacherResponse mapRecordToResponse(TeacherRecord teacher);
 
     @Mapping(target = "inCourses", source = "courses")
@@ -37,9 +38,11 @@ public interface TeacherMapper {
 
     List<Teacher> mapRecordToEntity(List<TeacherRecord> teacherRecordList);
 
+    @Mapping(target = "isPayableForCanceledLesson", source = "payableForCanceledLesson")
     Teacher mapRecordToEntity(TeacherRecord teacherRecord);
 
     TeacherRecord mapSaveRequestToRecord(TeacherSaveRequest teacherSaveRequest, Long id);
 
+    @Mapping(target = "payableForCanceledLesson", source = "isPayableForCanceledLesson")
     TeacherRecord mapEntityToRecord(Teacher teacher);
 }

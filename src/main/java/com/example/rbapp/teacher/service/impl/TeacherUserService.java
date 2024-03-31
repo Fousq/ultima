@@ -32,6 +32,7 @@ public class TeacherUserService {
         teacher.setPhone(request.phone());
         teacher.setBankDetails(request.bankDetails());
         teacher.setUserId(userId);
+        teacher.setIsPayableForCanceledLesson(request.payableForCanceledLesson());
         return teacherService.create(teacher);
     }
 }
