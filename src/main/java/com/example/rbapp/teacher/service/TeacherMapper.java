@@ -20,6 +20,7 @@ public interface TeacherMapper {
     TeacherResponse mapRecordToResponse(TeacherRecord teacher);
 
     @Mapping(target = "inCourses", source = "courses")
+    @Mapping(target = "isPayableForCanceledLesson", source = "teacher.payableForCanceledLesson")
     TeacherResponse mapRecordToResponse(TeacherRecord teacher, Collection<CourseRecord> courses);
 
     List<TeacherResponse> mapEntityToResponse(Collection<TeacherRecord> teachers);
@@ -43,6 +44,6 @@ public interface TeacherMapper {
 
     TeacherRecord mapSaveRequestToRecord(TeacherSaveRequest teacherSaveRequest, Long id);
 
-    @Mapping(target = "payableForCanceledLesson", source = "isPayableForCanceledLesson")
+    @Mapping(target = "payableForCanceledLesson", source = "isPayableForCanceledLesson", defaultValue = "false")
     TeacherRecord mapEntityToRecord(Teacher teacher);
 }

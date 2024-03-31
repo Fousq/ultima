@@ -29,6 +29,7 @@ public class TeacherRepositoryImpl implements TeacherRepository {
                 .set(TEACHER.SURNAME, teacher.getSurname())
                 .set(TEACHER.USER_ID, teacher.getUserId())
                 .set(TEACHER.BANK_DETAILS, teacher.getBankDetails())
+                .set(TEACHER.PAYABLE_FOR_CANCELED_LESSON, teacher.getPayableForCanceledLesson())
                 .returningResult(TEACHER.ID)
                 .fetchSingleInto(Long.class);
     }
