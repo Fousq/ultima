@@ -159,4 +159,14 @@ public class CourseSubjectRepository {
                         .and(TEACHER_COURSE.TEACHER_ID.eq(teacherId))
                 .fetchSingleInto(Integer.class);
     }
+
+    public Integer countCompletedSubjectsByCourseTypeForTeacher(Long teacherId, String type) {
+        return dslContext.selectCount().from(COURSE_SUBJECT)
+                .innerJoin(COURSE).on(COURSE.ID.eq(COURSE_SUBJECT.COURSE_ID))
+                .innerJoin(TEACHER_COURSE).on(TEACHER_COURSE.COURSE_ID.eq(COURSE_SUBJECT.COURSE_ID))
+                .where(COURSE.TYPE.eq(type))
+                .and(COURSE_SUBJECT.COMPLETED.isTrue())
+                .and(TEACHER_COURSE.TEACHER_ID.eq(teacherId))
+                .fetchSingleInto(Integer.class);
+    }
 }

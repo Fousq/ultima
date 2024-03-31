@@ -16,10 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.*;
 
 @Service
@@ -71,15 +69,19 @@ public class PaymentRateService {
         );
     }
 
-    public List<PaymentReport> getTeacherPaymentReport(Long teacherId, Month month) {
+    public List<PaymentReport> getTeacherPaymentForCompletedLessonsReport(Long teacherId, Month month) {
         YearMonth yearMonth = Year.now().atMonth(month);
         LocalDate startDate = yearMonth.atDay(1);
         LocalDate endDate = yearMonth.atEndOfMonth();
 
         return paymentRateRepository.findAllActualByTeacherId(teacherId).stream()
                 .map(paymentRateRecord -> {
-                    BigDecimal total = paymentRateRepository.countTotalForPaymentRateBetween(paymentRateRecord.getId(),
-                            startDate, endDate);
+                    BigDecimal total =
+                            paymentRateRepository.countTotalForPaymentRateOfCompletedLessonsBetween(
+                                    paymentRateRecord.getId(),
+                                    startDate,
+                                    endDate
+                            );
                     return new PaymentReport(paymentRateRecord.getType(), total, paymentRateRecord.getCurrencyId());
                 })
                 .toList();
@@ -96,5 +98,22 @@ public class PaymentRateService {
                     return paymentRateRecord;
                 }).toList();
         paymentRateRepository.batchUpdateAmount(paymentRateRecords);
+    }
+
+    public List<PaymentReport> getTeacherPaymentForLessonsReport(Long teacherId, Month month) {
+        YearMonth yearMonth = Year.now().atMonth(month);
+        LocalDate startDate = yearMonth.atDay(1);
+        LocalDate endDate = yearMonth.atEndOfMonth();
+
+        return paymentRateRepository.findAllActualByTeacherId(teacherId).stream()
+                .map(paymentRateRecord -> {
+                    BigDecimal total = paymentRateRepository.countTotalForPaymentRateOfLessonsBetween(
+                            paymentRateRecord.getId(),
+                            startDate,
+                            endDate
+                    );
+                    return new PaymentReport(paymentRateRecord.getType(), total, paymentRateRecord.getCurrencyId());
+                })
+                .toList();
     }
 }

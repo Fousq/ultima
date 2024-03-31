@@ -18,4 +18,6 @@ public class Teacher {
     private String bankDetails;
 
     private Long userId;
+
+    private Boolean isPayableForCanceledLesson;
 }

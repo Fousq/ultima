@@ -8,5 +8,6 @@ public record TeacherInviteRequest(String email,
                                    String bankDetails,
                                    Double individualPrice,
                                    Double pairPrice,
-                                   Double groupPrice) {
+                                   Double groupPrice,
+                                   Boolean payableForCanceledLesson) {
 }

@@ -10,5 +10,6 @@ public record TeacherResponse(Long id,
                               String email,
                               String phone,
                               List<CourseParticipationCompactResponse> inCourses,
-                              Long userId) {
+                              Long userId,
+                              Boolean isPayableForCanceledLesson) {
 }

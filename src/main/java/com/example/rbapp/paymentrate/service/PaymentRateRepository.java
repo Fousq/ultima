@@ -70,7 +70,7 @@ public class PaymentRateRepository {
                 .fetchInto(PaymentRateRecord.class);
     }
 
-    public BigDecimal countTotalForPaymentRateBetween(Long paymentRateId, LocalDate startDate, LocalDate endDate) {
+    public BigDecimal countTotalForPaymentRateOfCompletedLessonsBetween(Long paymentRateId, LocalDate startDate, LocalDate endDate) {
         return dslContext.select(sum(PAYMENT_RATE.AMOUNT))
                 .from(PAYMENT_RATE)
                 .innerJoin(TEACHER).on(TEACHER.ID.eq(PAYMENT_RATE.TEACHER_ID))
@@ -78,6 +78,7 @@ public class PaymentRateRepository {
                 .innerJoin(COURSE).on(COURSE.ID.eq(TEACHER_COURSE.COURSE_ID)).and(COURSE.TYPE.eq(PAYMENT_RATE.TYPE))
                 .innerJoin(COURSE_SUBJECT).on(COURSE_SUBJECT.COURSE_ID.eq(COURSE.ID))
                 .where(COURSE_SUBJECT.START_AT.between(startDate.atStartOfDay(), endDate.atTime(LocalTime.MAX)))
+                .and(COURSE_SUBJECT.COMPLETED.isTrue())
                 .and(PAYMENT_RATE.ID.eq(paymentRateId))
                 .fetchSingleInto(BigDecimal.class);
     }
@@ -100,5 +101,17 @@ public class PaymentRateRepository {
                 .where(PAYMENT_RATE.ID.eq(paymentRateRecord.getId()))
         ).toList();
         dslContext.batch(update).execute();
+    }
+
+    public BigDecimal countTotalForPaymentRateOfLessonsBetween(Long paymentRateId, LocalDate startDate, LocalDate endDate) {
+        return dslContext.select(sum(PAYMENT_RATE.AMOUNT))
+                .from(PAYMENT_RATE)
+                .innerJoin(TEACHER).on(TEACHER.ID.eq(PAYMENT_RATE.TEACHER_ID))
+                .innerJoin(TEACHER_COURSE).on(TEACHER_COURSE.TEACHER_ID.eq(TEACHER.ID))
+                .innerJoin(COURSE).on(COURSE.ID.eq(TEACHER_COURSE.COURSE_ID)).and(COURSE.TYPE.eq(PAYMENT_RATE.TYPE))
+                .innerJoin(COURSE_SUBJECT).on(COURSE_SUBJECT.COURSE_ID.eq(COURSE.ID))
+                .where(COURSE_SUBJECT.START_AT.between(startDate.atStartOfDay(), endDate.atTime(LocalTime.MAX)))
+                .and(PAYMENT_RATE.ID.eq(paymentRateId))
+                .fetchSingleInto(BigDecimal.class);
     }
 }

@@ -190,4 +190,8 @@ public class CourseSubjectService {
     public Integer countSubjectsByCourseTypeForTeacher(Long teacherId, String type) {
         return courseSubjectRepository.countSubjectsByCourseTypeForTeacher(teacherId, type);
     }
+
+    public Integer countCompletedSubjectsByCourseTypeForTeacher(Long teacherId, String type) {
+        return courseSubjectRepository.countCompletedSubjectsByCourseTypeForTeacher(teacherId, type);
+    }
 }

@@ -4,7 +4,6 @@ import com.example.rbapp.coursesubject.service.CourseSubjectService;
 import com.example.rbapp.currency.CurrencyService;
 import com.example.rbapp.paymentrate.controller.api.PaymentMonthReportResponse;
 import com.example.rbapp.paymentrate.controller.api.PaymentReportResponse;
-import com.example.rbapp.paymentrate.entity.PaymentRate;
 import com.example.rbapp.paymentrate.model.PaymentReport;
 import com.example.rbapp.teacher.controller.api.TeacherResponse;
 import com.example.rbapp.teacher.service.TeacherService;
@@ -13,7 +12,6 @@ import com.example.rbapp.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.Month;
 import java.time.format.TextStyle;
 import java.util.List;
@@ -33,12 +31,29 @@ public class PaymentReportService {
         User user = userService.loadUserByToken(token);
         Month month = Month.of(monthId);
         TeacherResponse teacher = teacherService.getByUserId(user.getId());
-        List<PaymentReport> paymentReports = paymentRateService.getTeacherPaymentReport(teacher.id(), month);
+        List<PaymentReport> paymentReports;
+        if (teacher.isPayableForCanceledLesson()) {
+            paymentReports = paymentRateService.getTeacherPaymentForLessonsReport(teacher.id(), month);
+        } else {
+            paymentReports = paymentRateService.getTeacherPaymentForCompletedLessonsReport(teacher.id(), month);
+        }
+
         // determine currency
         String currencyCode = currencyService.getCodeById(paymentReports.get(0).currencyId());
         // get final reports per type
         var paymentReportResponses = paymentReports.stream().map(paymentReport -> {
-            Integer subjectCount = courseSubjectService.countSubjectsByCourseTypeForTeacher(teacher.id(), paymentReport.type());
+            Integer subjectCount;
+            if (teacher.isPayableForCanceledLesson()) {
+                subjectCount = courseSubjectService.countSubjectsByCourseTypeForTeacher(
+                        teacher.id(),
+                        paymentReport.type()
+                );
+            } else {
+                subjectCount = courseSubjectService.countCompletedSubjectsByCourseTypeForTeacher(
+                        teacher.id(),
+                        paymentReport.type()
+                );
+            }
             return new PaymentReportResponse(paymentReport.total(), paymentReport.type(), subjectCount);
         }).toList();
         return new PaymentMonthReportResponse(month.getDisplayName(TextStyle.FULL, Locale.ENGLISH), currencyCode,
