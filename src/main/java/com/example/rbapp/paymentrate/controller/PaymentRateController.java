@@ -40,7 +40,7 @@ public class PaymentRateController {
     }
 
     @GetMapping("/teacher/{teacherId}/report/month/{monthId}")
-    public PaymentMonthReportResponse getTeacherMonthReport(@PathVariable("id") Long teacherId,
+    public PaymentMonthReportResponse getTeacherMonthReport(@PathVariable("teacherId") Long teacherId,
                                                             @PathVariable("monthId") Integer monthId) {
         return paymentReportService.getMonthReport(teacherId, monthId);
     }
