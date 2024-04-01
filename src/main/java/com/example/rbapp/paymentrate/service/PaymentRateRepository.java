@@ -60,6 +60,15 @@ public class PaymentRateRepository {
                 .fetch(paymentRateResponseRecordMapper);
     }
 
+    public List<PaymentRateResponse> findAllActualByTeacherIdAsResponse(Long teacherId) {
+        return dslContext.select(PAYMENT_RATE.asterisk(), CURRENCY.CODE).from(PAYMENT_RATE)
+                .innerJoin(TEACHER).on(TEACHER.ID.eq(PAYMENT_RATE.TEACHER_ID))
+                .innerJoin(CURRENCY).on(CURRENCY.ID.eq(PAYMENT_RATE.CURRENCY_ID))
+                .where(TEACHER.ID.eq(teacherId))
+                .and(PAYMENT_RATE.UPDATE_DATE.isNull())
+                .fetch(paymentRateResponseRecordMapper);
+    }
+
     public List<PaymentRateRecord> findTeacherPaymentRateBetween(LocalDate startDate, LocalDate endDate, Long teacherId) {
         return dslContext.select(PAYMENT_RATE.asterisk())
                 .from(PAYMENT_RATE)

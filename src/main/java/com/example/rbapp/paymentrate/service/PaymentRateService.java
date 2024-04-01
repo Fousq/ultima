@@ -116,4 +116,8 @@ public class PaymentRateService {
                 })
                 .toList();
     }
+
+    public List<PaymentRateResponse> getTeacherPaymentRateList(Long teacherId) {
+        return paymentRateRepository.findAllActualByTeacherIdAsResponse(teacherId);
+    }
 }

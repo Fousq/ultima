@@ -28,10 +28,21 @@ public class PaymentRateController {
         return paymentRateService.getUserPaymentRateList(userId);
     }
 
+    @GetMapping("/teacher/{id}")
+    public List<PaymentRateResponse> getTeacherPaymentRateList(@PathVariable("id") Long teacherId) {
+        return paymentRateService.getTeacherPaymentRateList(teacherId);
+    }
+
     @GetMapping("/teacher/report/month/{monthId}")
     public PaymentMonthReportResponse getTeacherMonthReport(@RequestHeader(AUTHORIZATION) String token,
                                                             @PathVariable("monthId") Integer monthId) {
         return paymentReportService.getMonthReport(token, monthId);
+    }
+
+    @GetMapping("/teacher/{teacherId}/report/month/{monthId}")
+    public PaymentMonthReportResponse getTeacherMonthReport(@PathVariable("id") Long teacherId,
+                                                            @PathVariable("monthId") Integer monthId) {
+        return paymentReportService.getMonthReport(teacherId, monthId);
     }
 
 //    @PostMapping("/teacher")

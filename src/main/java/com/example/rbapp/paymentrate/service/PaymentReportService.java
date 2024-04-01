@@ -59,4 +59,36 @@ public class PaymentReportService {
         return new PaymentMonthReportResponse(month.getDisplayName(TextStyle.FULL, Locale.ENGLISH), currencyCode,
                 paymentReportResponses);
     }
+
+    public PaymentMonthReportResponse getMonthReport(Long teacherId, Integer monthId) {
+        Month month = Month.of(monthId);
+        TeacherResponse teacher = teacherService.getById(teacherId);
+        List<PaymentReport> paymentReports;
+        if (teacher.isPayableForCanceledLesson()) {
+            paymentReports = paymentRateService.getTeacherPaymentForLessonsReport(teacher.id(), month);
+        } else {
+            paymentReports = paymentRateService.getTeacherPaymentForCompletedLessonsReport(teacher.id(), month);
+        }
+
+        // determine currency
+        String currencyCode = currencyService.getCodeById(paymentReports.get(0).currencyId());
+        // get final reports per type
+        var paymentReportResponses = paymentReports.stream().map(paymentReport -> {
+            Integer subjectCount;
+            if (teacher.isPayableForCanceledLesson()) {
+                subjectCount = courseSubjectService.countSubjectsByCourseTypeForTeacher(
+                        teacher.id(),
+                        paymentReport.type()
+                );
+            } else {
+                subjectCount = courseSubjectService.countCompletedSubjectsByCourseTypeForTeacher(
+                        teacher.id(),
+                        paymentReport.type()
+                );
+            }
+            return new PaymentReportResponse(paymentReport.total(), paymentReport.type(), subjectCount);
+        }).toList();
+        return new PaymentMonthReportResponse(month.getDisplayName(TextStyle.FULL, Locale.ENGLISH), currencyCode,
+                paymentReportResponses);
+    }
 }
