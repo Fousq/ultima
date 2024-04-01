@@ -15,7 +15,6 @@ public class StudentHomeworkDetailsRecordMapper implements RecordMapper<Record, 
     public StudentHomeworkDetailsResponse map(Record record) {
         Long id = record.getValue(HOMEWORK.ID);
         String title = record.getValue(HOMEWORK.TITLE);
-        String description = record.getValue(HOMEWORK.DESCRIPTION);
         List<String> files = record.getValue(HOMEWORK.FILES) != null ? List.of(record.getValue(HOMEWORK.FILES))
                 : List.of();
         Boolean completed = record.getValue(STUDENT_HOMEWORK.COMPLETED);
@@ -24,6 +23,7 @@ public class StudentHomeworkDetailsRecordMapper implements RecordMapper<Record, 
         String surname = record.getValue(STUDENT.SURNAME);
         Boolean inProgress = record.getValue(STUDENT_HOMEWORK.IN_PROGRESS);
         String feedback = record.getValue(STUDENT_HOMEWORK.FEEDBACK);
+        String description = record.getValue(STUDENT_HOMEWORK.DESCRIPTION);
 
         return new StudentHomeworkDetailsResponse(
                 id,

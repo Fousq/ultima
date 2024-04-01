@@ -121,6 +121,7 @@ public class HomeworkRepository {
                 .set(STUDENT_HOMEWORK.COMPLETED, studentHomeworkRecord.getCompleted())
                 .set(STUDENT_HOMEWORK.IN_PROGRESS, studentHomeworkRecord.getInProgress())
                 .set(STUDENT_HOMEWORK.FEEDBACK, studentHomeworkRecord.getFeedback())
+                .set(STUDENT_HOMEWORK.DESCRIPTION, studentHomeworkRecord.getDescription())
                 .where(STUDENT_HOMEWORK.HOMEWORK_ID.eq(studentHomeworkRecord.getHomeworkId()))
                 .and(STUDENT_HOMEWORK.STUDENT_ID.eq(studentHomeworkRecord.getStudentId()))
                 .execute();

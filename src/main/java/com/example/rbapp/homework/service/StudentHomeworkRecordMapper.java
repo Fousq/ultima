@@ -17,7 +17,7 @@ public class StudentHomeworkRecordMapper implements RecordMapper<Record, Student
         StudentHomework studentHomework = new StudentHomework();
         studentHomework.setId(record.getValue(HOMEWORK.ID));
         studentHomework.setTitle(record.getValue(HOMEWORK.TITLE));
-        studentHomework.setDescription(record.getValue(HOMEWORK.DESCRIPTION));
+        studentHomework.setDescription(record.getValue(STUDENT_HOMEWORK.DESCRIPTION));
         studentHomework.setCompleted(record.getValue(STUDENT_HOMEWORK.COMPLETED));
         studentHomework.setInProgress(record.getValue(STUDENT_HOMEWORK.IN_PROGRESS));
         studentHomework.setFeedback(record.getValue(STUDENT_HOMEWORK.FEEDBACK));

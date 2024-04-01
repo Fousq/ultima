@@ -120,6 +120,7 @@ public class HomeworkService {
         studentHomeworkRecord.setCompleted(request.completed());
         studentHomeworkRecord.setInProgress(request.progress());
         studentHomeworkRecord.setFeedback(request.feedback());
+        studentHomeworkRecord.setDescription(request.description());
         studentHomeworkRecord.setFile(request.file());
         homeworkRepository.findStudentHomeworkByHomeworkIdAndStudentId(homeworkId, studentId)
                 .ifPresentOrElse(
