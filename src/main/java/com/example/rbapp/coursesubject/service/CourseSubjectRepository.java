@@ -113,16 +113,19 @@ public class CourseSubjectRepository {
         Optional<Long> optionalStudentId = dslContext.select(STUDENT.ID).from(STUDENT)
                 .where(STUDENT.USER_ID.eq(userId))
                 .fetchOptionalInto(Long.class);
-        return optionalStudentId.flatMap(studentId ->
-                dslContext.select(COURSE_SUBJECT.ID, COURSE_SUBJECT.TITLE, COURSE_SUBJECT.START_AT, COURSE.LESSON_LINK)
+        return optionalStudentId.flatMap(studentId -> {
+            LocalDateTime now = LocalDateTime.now(DateTimeConstant.ALMATY);
+            return dslContext.select(COURSE_SUBJECT.ID, COURSE_SUBJECT.TITLE, COURSE_SUBJECT.START_AT, COURSE.LESSON_LINK)
                         .from(COURSE_SUBJECT)
                         .innerJoin(COURSE).on(COURSE.ID.eq(COURSE_SUBJECT.COURSE_ID))
                         .innerJoin(STUDENT_COURSE).on(STUDENT_COURSE.COURSE_ID.eq(COURSE_SUBJECT.COURSE_ID))
                         .where(STUDENT_COURSE.STUDENT_ID.eq(studentId))
-                        .and(COURSE_SUBJECT.START_AT.lessOrEqual(LocalDateTime.now(DateTimeConstant.ALMATY).plusHours(1)))
+                        .and(COURSE_SUBJECT.START_AT.between(now.minusHours(1), now.plusHours(1)))
+                    .and(COURSE_SUBJECT.COMPLETED.isFalse().or(COURSE_SUBJECT.COMPLETED.isNull()))
                         .orderBy(COURSE_SUBJECT.START_AT)
                         .limit(1)
-                        .fetchOptional(recentCourseSubjectResponseRecordMapper)
+                        .fetchOptional(recentCourseSubjectResponseRecordMapper);
+                }
         );
     }
 
@@ -130,16 +133,19 @@ public class CourseSubjectRepository {
         Optional<Long> optionalTeacherId = dslContext.select(TEACHER.ID).from(TEACHER)
                 .where(TEACHER.USER_ID.eq(userId))
                 .fetchOptionalInto(Long.class);
-        return optionalTeacherId.flatMap(teacherId ->
-                dslContext.select(COURSE_SUBJECT.ID, COURSE_SUBJECT.TITLE, COURSE_SUBJECT.START_AT, COURSE.LESSON_LINK)
-                        .from(COURSE_SUBJECT)
-                        .innerJoin(TEACHER_COURSE).on(TEACHER_COURSE.COURSE_ID.eq(COURSE_SUBJECT.COURSE_ID))
-                        .innerJoin(COURSE).on(COURSE.ID.eq(TEACHER_COURSE.COURSE_ID))
-                        .where(TEACHER_COURSE.TEACHER_ID.eq(teacherId))
-                        .and(COURSE_SUBJECT.START_AT.lessOrEqual(LocalDateTime.now().plusHours(1)))
-                        .orderBy(COURSE_SUBJECT.START_AT)
-                        .limit(1)
-                        .fetchOptional(recentCourseSubjectResponseRecordMapper)
+        return optionalTeacherId.flatMap(teacherId -> {
+            LocalDateTime now = LocalDateTime.now();
+            return dslContext.select(COURSE_SUBJECT.ID, COURSE_SUBJECT.TITLE, COURSE_SUBJECT.START_AT, COURSE.LESSON_LINK)
+                            .from(COURSE_SUBJECT)
+                            .innerJoin(TEACHER_COURSE).on(TEACHER_COURSE.COURSE_ID.eq(COURSE_SUBJECT.COURSE_ID))
+                            .innerJoin(COURSE).on(COURSE.ID.eq(TEACHER_COURSE.COURSE_ID))
+                            .where(TEACHER_COURSE.TEACHER_ID.eq(teacherId))
+                            .and(COURSE_SUBJECT.START_AT.between(now.minusHours(1), now.plusHours(1)))
+                    .and(COURSE_SUBJECT.COMPLETED.isFalse().or(COURSE_SUBJECT.COMPLETED.isNull()))
+                            .orderBy(COURSE_SUBJECT.START_AT)
+                            .limit(1)
+                            .fetchOptional(recentCourseSubjectResponseRecordMapper);
+                }
         );
     }
 
