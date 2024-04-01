@@ -41,12 +41,12 @@ public class ChatMessageRepository {
     public void deleteAllByUserId(Long userId) {
         dslContext.transaction(conf -> {
             DSLContext context = DSL.using(conf);
-            Long chatRoomId = context.select(CHAT_ROOM_USER.CHAT_ROOM_ID)
+            List<Long> chatRoomIds = context.select(CHAT_ROOM_USER.CHAT_ROOM_ID)
                     .from(CHAT_ROOM_USER)
                     .where(CHAT_ROOM_USER.USER_ID.eq(userId))
-                    .fetchSingleInto(Long.class);
+                    .fetchInto(Long.class);
             context.deleteFrom(CHAT_ROOM_MESSAGE)
-                    .where(CHAT_ROOM_MESSAGE.CHAT_ROOM_ID.eq(chatRoomId))
+                    .where(CHAT_ROOM_MESSAGE.CHAT_ROOM_ID.in(chatRoomIds))
                     .execute();
         });
     }
