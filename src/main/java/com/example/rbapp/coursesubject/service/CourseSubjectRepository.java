@@ -1,6 +1,7 @@
 package com.example.rbapp.coursesubject.service;
 
 import com.example.rbapp.api.exception.NotFoundException;
+import com.example.rbapp.constant.DateTimeConstant;
 import com.example.rbapp.coursesubject.controller.api.RecentCourseSubjectResponse;
 import com.example.rbapp.coursesubject.service.recordmapper.RecentCourseSubjectResponseRecordMapper;
 import com.example.rbapp.jooq.codegen.tables.records.CourseSubjectRecord;
@@ -118,7 +119,7 @@ public class CourseSubjectRepository {
                         .innerJoin(COURSE).on(COURSE.ID.eq(COURSE_SUBJECT.COURSE_ID))
                         .innerJoin(STUDENT_COURSE).on(STUDENT_COURSE.COURSE_ID.eq(COURSE_SUBJECT.COURSE_ID))
                         .where(STUDENT_COURSE.STUDENT_ID.eq(studentId))
-                        .and(COURSE_SUBJECT.START_AT.lessOrEqual(LocalDateTime.now().plusHours(1)))
+                        .and(COURSE_SUBJECT.START_AT.lessOrEqual(LocalDateTime.now(DateTimeConstant.ALMATY).plusHours(1)))
                         .orderBy(COURSE_SUBJECT.START_AT)
                         .limit(1)
                         .fetchOptional(recentCourseSubjectResponseRecordMapper)
