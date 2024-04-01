@@ -115,9 +115,9 @@ public class CourseSubjectRepository {
         return optionalStudentId.flatMap(studentId ->
                 dslContext.select(COURSE_SUBJECT.ID, COURSE_SUBJECT.TITLE, COURSE_SUBJECT.START_AT, COURSE.LESSON_LINK)
                         .from(COURSE_SUBJECT)
-                        .innerJoin(STUDENT_COURSE_SUBJECT).on(STUDENT_COURSE_SUBJECT.COURSE_SUBJECT_ID.eq(COURSE_SUBJECT.ID))
                         .innerJoin(COURSE).on(COURSE.ID.eq(COURSE_SUBJECT.COURSE_ID))
-                        .where(STUDENT_COURSE_SUBJECT.STUDENT_ID.eq(studentId))
+                        .innerJoin(STUDENT_COURSE).on(STUDENT_COURSE.COURSE_ID.eq(COURSE_SUBJECT.COURSE_ID))
+                        .where(STUDENT_COURSE.STUDENT_ID.eq(studentId))
                         .and(COURSE_SUBJECT.START_AT.lessOrEqual(LocalDateTime.now().plusHours(1)))
                         .orderBy(COURSE_SUBJECT.START_AT)
                         .limit(1)
