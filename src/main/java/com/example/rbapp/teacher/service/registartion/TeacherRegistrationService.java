@@ -32,7 +32,7 @@ public class TeacherRegistrationService implements RegistrationService {
         var teacher = teacherMapper.mapRegistrationRequestToRecord(request, userId);
         Long teacherId = teacherRepository.create(teacher);
         Teacher teacherEntity = teacherMapper.mapRecordToEntity(teacher);
-        Long bitrixId = bitrixService.createTeacherUser(teacherEntity);
+        Long bitrixId = bitrixService.createTeacherContact(teacherEntity);
         teacherRepository.updateBitrixIdById(bitrixId, teacherId);
     }
 

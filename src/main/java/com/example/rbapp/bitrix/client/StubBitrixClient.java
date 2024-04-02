@@ -13,6 +13,11 @@ public class StubBitrixClient implements BitrixClient {
     }
 
     @Override
+    public CreateClientResponse createContactWithType(CreateContactWithTypeRequest createContactWithTypeRequest) {
+        return null;
+    }
+
+    @Override
     public BitrixResponse createUser(CreateUserRequest createUserRequest) {
         log.info("Create user");
         return new BitrixResponse(0L);

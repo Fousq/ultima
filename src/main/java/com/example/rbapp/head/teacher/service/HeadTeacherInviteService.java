@@ -17,7 +17,7 @@ public class HeadTeacherInviteService {
 
     public void processInvite(HeadTeacherInviteRequest request) {
         HeadTeacher headTeacher = headTeacherUserService.create(request);
-        Long bitrixId = bitrixService.createHeadTeacherUser(headTeacher);
+        Long bitrixId = bitrixService.createHeadTeacherContact(headTeacher);
         headTeacherService.updateBitrix(headTeacher, bitrixId);
         inviteHeadTeacherMailService.sendEmail(headTeacher);
     }

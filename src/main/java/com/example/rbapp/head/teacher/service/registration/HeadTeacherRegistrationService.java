@@ -31,7 +31,7 @@ public class HeadTeacherRegistrationService implements RegistrationService {
         headTeacher.setUserId(userId);
         Long headTeacherId = headTeacherRepository.create(headTeacher);
         HeadTeacher headTeacherEntity = headTeacherMapper.mapRecordToEntity(headTeacher);
-        Long bitrixId = bitrixService.createHeadTeacherUser(headTeacherEntity);
+        Long bitrixId = bitrixService.createHeadTeacherContact(headTeacherEntity);
         headTeacherRepository.updateBitrixIdById(bitrixId, headTeacherId);
     }
 

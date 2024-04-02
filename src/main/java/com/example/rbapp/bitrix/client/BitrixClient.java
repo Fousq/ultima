@@ -11,6 +11,9 @@ public interface BitrixClient {
     @PostMapping("/crm.contact.add")
     CreateClientResponse createClient(@RequestBody CreateClientRequest createClientRequest);
 
+    @PostMapping("/crm.contact.add")
+    CreateClientResponse createContactWithType(@RequestBody CreateContactWithTypeRequest createContactWithTypeRequest);
+
     @PostMapping("/user.add")
     BitrixResponse createUser(@RequestBody CreateUserRequest createUserRequest);
 

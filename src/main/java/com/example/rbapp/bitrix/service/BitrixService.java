@@ -109,4 +109,24 @@ public class BitrixService {
         // TODO uncomment after Bitrix implementation
 //        bitrixClient.createBookPurchaseApplication(new CreateBookPurchaseApplicationRequest());
     }
+
+    public Long createTeacherContact(Teacher teacher) {
+        String title = teacher.getName() + teacher.getPhone();
+        var phone = List.of(new BitrixValue(teacher.getPhone(), WORK_VALUE_TYPE));
+        var email = List.of(new BitrixValue(teacher.getEmail(), WORK_VALUE_TYPE));
+        // 2 - преподаватель
+        var clientFields = new BitrixCreateContactWithTypeFields(title, 2, teacher.getName(), email, phone);
+        var createContactWithTypeRequest = new CreateContactWithTypeRequest(clientFields);
+        return bitrixClient.createContactWithType(createContactWithTypeRequest).clientId();
+    }
+
+    public Long createHeadTeacherContact(HeadTeacher headTeacher) {
+        String title = headTeacher.getName() + headTeacher.getPhone();
+        var phone = List.of(new BitrixValue(headTeacher.getPhone(), WORK_VALUE_TYPE));
+        var email = List.of(new BitrixValue(headTeacher.getEmail(), WORK_VALUE_TYPE));
+        // 1 - куратор
+        var clientFields = new BitrixCreateContactWithTypeFields(title, 1, headTeacher.getName(), email, phone);
+        var createContactWithTypeRequest = new CreateContactWithTypeRequest(clientFields);
+        return bitrixClient.createContactWithType(createContactWithTypeRequest).clientId();
+    }
 }

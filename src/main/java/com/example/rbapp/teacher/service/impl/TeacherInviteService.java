@@ -34,7 +34,7 @@ public class TeacherInviteService {
         List<PaymentRate> paymentRates = createPaymentRates(request);
 
         paymentRateService.create(paymentRates, teacher.getId());
-        Long bitrixId = bitrixService.createTeacherUser(teacher);
+        Long bitrixId = bitrixService.createTeacherContact(teacher);
         teacherService.updateBitrixId(teacher, bitrixId);
         teacherMailService.sendMail(teacher);
     }
